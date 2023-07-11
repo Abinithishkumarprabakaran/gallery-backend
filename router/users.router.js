@@ -45,7 +45,7 @@ router.post("/login", async function (request, response) {
   const { email, password } = request.body;
 
   const userFromDB = await getUserByEmail(email);
-
+  
   if(!userFromDB) {
     response.status(404).send({ message: "Invalid Credentials" });
   }
