@@ -1,4 +1,5 @@
 import { client } from '../index.js';
+import { ObjectId } from 'mongodb';
 
 export async function getUserByEmail(email) {
   return await client
@@ -12,4 +13,11 @@ export async function createUser(data) {
       .db("GalleryVue")
       .collection("users")
       .insertOne(data);
+}
+
+export async function getUserById(id) {
+  return await client
+      .db("GalleryVue")
+      .collection("users")
+      .findOne({ _id: new ObjectId(id) });
 }

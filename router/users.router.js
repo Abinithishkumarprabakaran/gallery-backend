@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { getUserByEmail, createUser } from "../service/users.service.js";
+import { getUserByEmail, createUser, getUserById } from "../service/users.service.js";
 
 const router = express.Router();
 
@@ -55,12 +55,25 @@ router.post("/login", async function (request, response) {
 
     if( isPasswordCheck ) {
       const token = jwt.sign({ id: userFromDB._id }, process.env.SECRET_KEY)
-      response.send({ message: "Login Successfully", token: token });
+      response.send({ message: "Login Successfully", token: token, user: userFromDB });
     }
     else {
       response.status(401).send({ message: 'Invalid Credentials' })
     }
   }
+})
+
+router.get("/profile/id", async function(request, response) {
+
+  console.log("Profile is Triggered")
+
+  const { id } = request.params;
+
+  console.log(request.params)
+
+  const user = await getUserById(id);
+
+  user ? response.send(user) : response.status(404).send({ message: "User Not Found" })
 })
 
 export default router;
